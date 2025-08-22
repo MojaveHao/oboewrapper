@@ -1,3 +1,6 @@
 [submodule "oboe"]
 	path = oboe
 	url = git@github.com:google/oboe.git
+[submodule "libnyquist"]
+	path = libnyquist
+	url = git@github.com:ddiakopoulos/libnyquist.git

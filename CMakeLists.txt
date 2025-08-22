@@ -25,28 +25,49 @@ project(blophy-audio)
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
 add_subdirectory(./oboe ./oboec)
-include_directories(./oboe/include)
+add_subdirectory(./libnyquist)
 file(GLOB OBOE_SOURCES
-        "./oboe/src/*.cpp"
-        "./oboe/src/aaudio/*.cpp"
-        "./oboe/src/common/*.cpp"
-        "./oboe/src/fifo/*.cpp"
-        "./oboe/src/flowgraph/*.cpp"
-        "./oboe/src/flowgraph/resampler/*.cpp"
-        "./oboe/src/opensles/*.cpp"
+     "./oboe/src/*.cpp"
+     "./oboe/src/aaudio/*.cpp"
+     "./oboe/src/common/*.cpp"
+     "./oboe/src/fifo/*.cpp"
+     "./oboe/src/flowgraph/*.cpp"
+     "./oboe/src/flowgraph/resampler/*.cpp"
+     "./oboe/src/opensles/*.cpp"
 )
+file(GLOB NYQUIST_SOURCES
+     "./libnyquist/include/libnyquist/*.h"
+     "./libnyquist/src/*.cpp"
+     "./libnyquist/src/*.c"
+     "./libnyquist/third_party/wavpack/include/wavpack.h"
+     "./libnyquist/third_party/wavpack/src/*.c"
+     "./libnyquist/third_party/wavpack/src/*.h")
 add_library(${CMAKE_PROJECT_NAME} SHARED
-        # List C/C++ source files with relative paths to this CMakeLists.txt.
-        native-lib.cpp ${OBOE_SOURCES})
+            # List C/C++ source files with relative paths to this CMakeLists.txt.
+            blophy-audio.cpp
+            blophy-audio.h ${OBOE_SOURCES} ${NYQUIST_SOURCES})
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-        ./oboe/include
-        ./oboe/src
+                           ./oboe/include
+                           ./oboe/src
+                           ./libnyquist/include/libnyquist
+                           ./libnyquist/src
+                           ./libnyquist/third_party
+                           ./libnyquist/third_party/libogg/include
+                           ./libnyquist/third_party/FLAC/src/include
+                           ./libnyquist/third_party/musepack/include
+                           ./libnyquist/third_party/opus/libopus/include
+                           ./libnyquist/third_party/opus/silk
+                           ./libnyquist/third_party/opus/silk/float
+                           ./libnyquist/third_party/opus/celt
+                           ./libnyquist/third_party/opus/opusfile/include
+                           ./libnyquist/third_party/opus/opusfile/src/include
+                           ./libnyquist/third_party/libvorbis/include
+                           ./libnyquist/third_party/libvorbis/src
+                           ./libnyquist/third_party/wavpack/include
+                           ./libnyquist/third_party/wavpack/src
 )
 
-# Specifies libraries CMake should link to your target library. You
-# can link libraries from various origins, such as libraries defined in this
-# build script, prebuilt third-party libraries, or Android system libraries.
 target_link_libraries(${CMAKE_PROJECT_NAME}
-        # List libraries link to the target library
-        android
-        log)
+                      # List libraries link to the target library
+                      android
+                      log)
